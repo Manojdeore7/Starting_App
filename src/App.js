@@ -5,6 +5,7 @@ import "./App.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   async function customMovies() {
     const res = await fetch("https://reqres.in/api/users?page=2");
     const dat = await res.json();
@@ -19,6 +20,7 @@ function App() {
       };
     });
     setMovies(inf);
+    setIsLoading(true);
   }
 
   return (
@@ -27,7 +29,8 @@ function App() {
         <button onClick={customMovies}>Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={movies} />
+        {!isLoading && <p>Loading...</p>}
+        {isLoading && <MoviesList movies={movies} />}
       </section>
     </React.Fragment>
   );
