@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -7,14 +7,26 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setError] = useState(null);
+  const [check, setCheck] = useState(false);
+  function manoj() {
+    setCheck(true);
+  }
+  useEffect(() => {
+    customMovies();
+  }, []);
   async function customMovies() {
     try {
       setIsLoading(true);
       setError(null);
-      const res = await fetch("https://reqres.in/api/");
-      if (!res.ok) {
-        throw new Error("something wennt wrong ....Retrying!");
+      while (!check) {
+        var res = await fetch("https://reqres.in/api/users?page=2");
+        if (!res.ok) {
+          throw new Error("something wennt wrong ....Retrying!");
+        } else {
+          break;
+        }
       }
+
       const dat = await res.json();
       let inf = dat.data.map((e) => {
         return {
@@ -48,7 +60,7 @@ function App() {
 
       {isLoading && (
         <section>
-          <button onClick={customMovies}>Cancel</button>
+          <button onClick={manoj}>Cancel</button>
         </section>
       )}
     </React.Fragment>
