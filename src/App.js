@@ -6,7 +6,9 @@ import "./App.css";
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   async function customMovies() {
+    setIsLoading(true);
     const res = await fetch("https://reqres.in/api/users?page=2");
     const dat = await res.json();
     let inf = dat.data.map((e) => {
@@ -19,8 +21,9 @@ function App() {
         openingText: e.last_name,
       };
     });
+
+    setIsLoading(false);
     setMovies(inf);
-    setIsLoading(true);
   }
 
   return (
@@ -29,8 +32,9 @@ function App() {
         <button onClick={customMovies}>Fetch Movies</button>
       </section>
       <section>
-        {!isLoading && <p>Loading...</p>}
-        {isLoading && <MoviesList movies={movies} />}
+        {isLoading && <p>Loading...</p>}
+        {movies.length > 0 && <MoviesList movies={movies} />}
+        {!isLoading && movies.length === 0 && <p>There is no data</p>}
       </section>
     </React.Fragment>
   );
